@@ -1,5 +1,8 @@
 package io.github.seriousguy888.musikkeur.guis;
 
+import com.github.stefvanschie.inventoryframework.gui.GuiItem;
+import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
+import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
@@ -10,10 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ipvp.canvas.Menu;
-import org.ipvp.canvas.mask.BinaryMask;
-import org.ipvp.canvas.mask.Mask;
-import org.ipvp.canvas.type.ChestMenu;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
 
 public class NoteBlockGui implements Listener {
   @EventHandler
@@ -36,21 +38,31 @@ public class NoteBlockGui implements Listener {
 
     String noteString = String.format("%d-%s%s", note.getOctave(), note.getTone(), note.isSharped() ? "#" : "");
 
-    Menu menu = ChestMenu.builder(6)
-        .title(String.format("Note Block [%s %s]", instrument, noteString))
-        .build();
-    Mask mask = BinaryMask.builder(menu)
-        .item(new ItemStack(Material.BLACK_STAINED_GLASS_PANE))
-        .pattern("111111111")
-        .pattern("100000001")
-        .pattern("100000001")
-        .pattern("100000001")
-        .pattern("100000001")
-        .pattern("111111111")
-        .build();
-    mask.apply(menu);
+    ChestGui gui = new ChestGui(6, String.format("Note Block [%s %s]", instrument, noteString));
+    gui.setOnGlobalClick(e -> e.setCancelled(true));
+    gui.setOnGlobalDrag(e -> e.setCancelled(true));
 
+    OutlinePane bgPane = new OutlinePane(0, 0, 9, 6);
+    bgPane.addItem(new GuiItem(createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ")));
+    bgPane.setRepeat(true);
 
-    menu.open(player);
+    gui.addPane(bgPane);
+
+    gui.show(player);
   }
+
+
+  @SuppressWarnings("SameParameterValue")
+  private ItemStack createItem(Material material, int count, String name, String... lore) {
+    ItemStack item = new ItemStack(material);
+    item.setAmount(count);
+    ItemMeta meta = item.getItemMeta();
+    if(meta == null)
+      return item;
+    meta.setDisplayName(name);
+    meta.setLore(Arrays.asList(lore));
+    item.setItemMeta(meta);
+    return item;
+  }
+
 }

@@ -32,6 +32,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
+                <configuration>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.github.stefvanschie.inventoryframework</pattern>
+                            <shadedPattern>io.github.seriousguy888.inventoryframework</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -72,10 +81,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.ipvp</groupId>
-            <artifactId>canvas</artifactId>
-            <version>1.7.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>com.github.stefvanschie.inventoryframework</groupId>
+            <artifactId>IF</artifactId>
+            <version>0.10.3</version>
         </dependency>
     </dependencies>
 </project>
