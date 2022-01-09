@@ -9,7 +9,6 @@ import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -77,6 +76,8 @@ public class NoteBlockGui implements Listener {
         keyPane.addItem(new GuiItem(item), x, y);
       }
     }
+
+    // forgot to make commit message
 
     keyPane.setOnClick(clickEvent -> {
       HumanEntity clicker = clickEvent.getWhoClicked();
