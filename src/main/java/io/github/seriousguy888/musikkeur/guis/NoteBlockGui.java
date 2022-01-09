@@ -9,6 +9,7 @@ import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -49,48 +50,53 @@ public class NoteBlockGui implements Listener {
     gui.addPane(bgPane);
 
 
-    Notes[][] guiLayout = {
-        { Notes.FSharp, Notes.GSharp, Notes.ASharp, null, null, null, null, null, null },
-        { null, Notes.G, Notes.A, Notes.B, null, null, null, null, null },
-        { Notes.CSharp, Notes.DSharp, null, Notes.FSharp, Notes.GSharp, Notes.ASharp, null, null, null },
-        { Notes.C, Notes.D, Notes.E, Notes.F, Notes.G, Notes.A, Notes.B, null, null },
-        { Notes.CSharp, Notes.DSharp, null, Notes.FSharp, null, null, null, null, null },
-        { Notes.C, Notes.D, Notes.E, Notes.F, null, null, null, null, null },
-    };
-    Notes[] sharps = {
-        Notes.CSharp, Notes.DSharp, Notes.FSharp, Notes.GSharp, Notes.ASharp
+    Note[][] guiLayout = {
+        { new Note(0), new Note(2), new Note(4), null, null, null, null, null, null },
+        { null, new Note(1), new Note(3), new Note(5), null, null, null, null, null },
+        { new Note(7), new Note(9), null, new Note(12), new Note(14), new Note(16), null, null, null },
+        { new Note(6), new Note(8), new Note(10), new Note(11), new Note(13), new Note(15), new Note(17), null, null },
+        { new Note(19), new Note(21), null, new Note(24), null, null, null, null, null },
+        { new Note(18), new Note(20), new Note(22), new Note(23), null, null, null, null, null },
     };
 
-//    ItemStack whiteKey = createItem(Material.WHITE_CONCRETE, 1, "white key");
-//    ItemStack blackKey = createItem(Material.BLACK_CONCRETE, 1, "black key");
 
     StaticPane keyPane = new StaticPane(0, 0, 9, 6, Pane.Priority.NORMAL);
-//    blackKeyPane.addItem(new GuiItem(blackKey), 0, 0);
-//    blackKeyPane.setOnClick(evt -> {
-//      HumanEntity clicker = evt.getWhoClicked();
-//      clicker.sendMessage(String.valueOf(evt.getSlot()));
-//    });
 
     for(int y = 0; y < guiLayout.length; y++) {
-      Notes[] noteRow = guiLayout[y];
+      Note[] noteRow = guiLayout[y];
       for(int x = 0; x < noteRow.length; x++) {
-        Notes loopNote = noteRow[x];
+        Note loopNote = noteRow[x];
 
         if(loopNote == null)
           continue;
 
-        boolean isBlackKey = Arrays.stream(sharps).anyMatch(n -> n == loopNote);
         ItemStack item = createItem(
-            isBlackKey ? Material.BLACK_CONCRETE : Material.WHITE_CONCRETE, 1,
-            loopNote.name().replace("Sharp", "#"));
+            loopNote.isSharped() ? Material.BLACK_CONCRETE : Material.WHITE_CONCRETE, 1,
+            loopNote.getTone() + (loopNote.isSharped() ? "#" : ""));
 
         keyPane.addItem(new GuiItem(item), x, y);
       }
     }
 
+    keyPane.setOnClick(clickEvent -> {
+      HumanEntity clicker = clickEvent.getWhoClicked();
+
+      int slotX = (int) Math.floor((double) clickEvent.getSlot() / 9);
+      int slotY = clickEvent.getSlot() % 9;
+      Note selectedNote = guiLayout[slotX][slotY];
+
+      clicker.sendMessage(selectedNote.toString() +
+              (int) Math.floor((double) (clickEvent.getSlot()) / 18)
+      );
+
+
+
+      noteBlock.setNote(selectedNote);
+      block.setBlockData(noteBlock);
+    });
+
+
     gui.addPane(keyPane);
-
-
 
     gui.show(player);
   }
@@ -108,14 +114,4 @@ public class NoteBlockGui implements Listener {
     item.setItemMeta(meta);
     return item;
   }
-}
-
-enum Notes {
-  C, CSharp,
-  D, DSharp,
-  E,
-  F, FSharp,
-  G, GSharp,
-  A, ASharp,
-  B
 }
