@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
@@ -73,11 +74,13 @@ public class NoteBlockGui implements Listener {
             loopNote.isSharped() ? Material.BLACK_CONCRETE : Material.WHITE_CONCRETE, 1,
             loopNote.getTone() + (loopNote.isSharped() ? "#" : ""));
 
+        ItemStack banner = new ItemStack(Material.WHITE_BANNER);
+        BannerMeta bannerMeta = (BannerMeta) banner;
+
         keyPane.addItem(new GuiItem(item), x, y);
       }
     }
 
-    // forgot to make commit message
 
     keyPane.setOnClick(clickEvent -> {
       HumanEntity clicker = clickEvent.getWhoClicked();

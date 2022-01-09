@@ -4,3 +4,8 @@ main: io.github.seriousguy888.musikkeur.Musikkeur
 api-version: 1.17
 authors: [ SeriousGuy888, RandumPerson314 ]
 description: Tune note blocks
+
+commands: 
+  musikkeur:
+    description: oeuf
+    permission: musikkeur.use
