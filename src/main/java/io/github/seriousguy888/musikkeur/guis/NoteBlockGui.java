@@ -3,6 +3,8 @@ package io.github.seriousguy888.musikkeur.guis;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
+import com.github.stefvanschie.inventoryframework.pane.Pane;
+import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
@@ -28,8 +30,6 @@ public class NoteBlockGui implements Listener {
       return;
 
     Player player = event.getPlayer();
-    if(!player.isSneaking())
-      return;
 
     event.setCancelled(true);
 
