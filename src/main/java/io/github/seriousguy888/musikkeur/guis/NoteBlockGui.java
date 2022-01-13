@@ -15,6 +15,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -32,6 +33,9 @@ public class NoteBlockGui implements Listener {
   public void onInteract(PlayerInteractEvent event) {
     Player player = event.getPlayer();
     if(!plugin.musikkeurEnabled.get(player))
+      return;
+
+    if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
       return;
 
     Block block = event.getClickedBlock();
