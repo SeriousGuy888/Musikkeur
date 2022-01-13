@@ -15,6 +15,7 @@ import java.util.HashMap;
 public final class Musikkeur extends JavaPlugin {
   public File dataFile;
   public FileConfiguration dataConfig;
+  public DataManager dataManager;
   public HashMap<Player, Boolean> musikkeurEnabled;
 
   @Override
@@ -33,13 +34,16 @@ public final class Musikkeur extends JavaPlugin {
     }
     dataConfig = YamlConfiguration.loadConfiguration(dataFile);
 
+    dataManager = new DataManager(this);
     musikkeurEnabled = new HashMap<>();
+
+    dataManager.loadPlayerData(); // load data of all online players
   }
 
   private void registerListeners() {
     PluginManager pluginManager = Bukkit.getPluginManager();
 
-    pluginManager.registerEvents(new NoteBlockGui(), this);
+    pluginManager.registerEvents(new NoteBlockGui(this), this);
     pluginManager.registerEvents(new JoinLeaveListener(this), this);
 
     this.getCommand("musikkeur").setExecutor(new MusikkeurCommand(this));
@@ -47,6 +51,6 @@ public final class Musikkeur extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    // Plugin shutdown logic
+    dataManager.savePlayerData();
   }
 }

@@ -1,5 +1,6 @@
 package io.github.seriousguy888.musikkeur;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,9 +23,12 @@ public class MusikkeurCommand implements CommandExecutor {
             return true;
         }
 
+        Player player = (Player) sender;
+        Boolean enabled = plugin.musikkeurEnabled.get(player);
 
+        player.sendMessage(ChatColor.YELLOW + (enabled ? "Disabling" : "Enabling") + " Musikkeur note block editing.");
+        plugin.musikkeurEnabled.put(player, !enabled);
 
-
-        return false;
+        return true;
     }
 }

@@ -5,6 +5,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import io.github.seriousguy888.musikkeur.Musikkeur;
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
@@ -22,15 +23,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 
 public class NoteBlockGui implements Listener {
+  Musikkeur plugin;
+  public NoteBlockGui(Musikkeur plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler
   public void onInteract(PlayerInteractEvent event) {
+    Player player = event.getPlayer();
+    if(!plugin.musikkeurEnabled.get(player))
+      return;
+
     Block block = event.getClickedBlock();
     if(block == null)
       return;
     if(block.getType() != Material.NOTE_BLOCK)
       return;
-
-    Player player = event.getPlayer();
 
     event.setCancelled(true);
 
@@ -88,6 +96,9 @@ public class NoteBlockGui implements Listener {
       int slotX = (int) Math.floor((double) clickEvent.getSlot() / 9);
       int slotY = clickEvent.getSlot() % 9;
       Note selectedNote = guiLayout[slotX][slotY];
+
+      if(selectedNote == null)
+        return;
 
       clicker.sendMessage(selectedNote.toString() +
               (int) Math.floor((double) (clickEvent.getSlot()) / 18)

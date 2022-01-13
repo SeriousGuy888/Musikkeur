@@ -18,31 +18,12 @@ public class JoinLeaveListener implements Listener {
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
-    String uuid = player.getUniqueId().toString();
-
-    boolean enabled;
-    if(!plugin.dataConfig.contains(uuid + ".enabled")) {
-      enabled = true;
-    } else {
-      // get the player's data saved in data.yml
-      enabled = plugin.dataConfig.getBoolean(uuid + ".enabled");
-    }
-
-    // save whether the player has musikkeur enabled in this hashmap.
-    plugin.musikkeurEnabled.put(player, enabled);
+    plugin.dataManager.loadPlayerData(player);
   }
 
   @EventHandler
   public void onLeave(PlayerQuitEvent event) {
     Player player = event.getPlayer();
-    String uuid = player.getUniqueId().toString();
-
-    Boolean enabled = plugin.musikkeurEnabled.get(player);
-    plugin.dataConfig.set(uuid + ".enabled", enabled);
-    try {
-      plugin.dataConfig.save(plugin.dataFile);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    plugin.dataManager.savePlayerData(player);
   }
 }
