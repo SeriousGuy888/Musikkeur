@@ -11,32 +11,42 @@ public class DataManager {
     this.plugin = plugin;
   }
 
+  /**
+   * Load in the preferences and data of all currently online players from data.yml.
+   */
   public void loadPlayerData() {
     Bukkit.getOnlinePlayers().forEach(this::loadPlayerData);
   }
+
+  /**
+   * Load the preferences and data of a player from data.yml.
+   * @param player The player to load the data for.
+   */
   public void loadPlayerData(Player player) {
     String uuid = player.getUniqueId().toString();
+    boolean enabled = true;
 
-    boolean enabled;
-    if(!plugin.dataConfig.contains(uuid + ".enabled")) {
-      // set enabled to true if it is not present in the config file
-      enabled = true;
-    } else {
-      // get the player's data saved in data.yml
+    if(plugin.dataConfig.contains(uuid + ".enabled"))
       enabled = plugin.dataConfig.getBoolean(uuid + ".enabled");
-    }
-
-    // save whether the player has musikkeur enabled in this hashmap.
     plugin.musikkeurEnabled.put(player, enabled);
   }
 
+
+  /**
+   * Save the preferences and data of all currently online players to data.yml.
+   */
   public void savePlayerData() {
     Bukkit.getOnlinePlayers().forEach(this::savePlayerData);
   }
+
+  /**
+   * Save the preferences and data of a player and write it to data.yml.
+   * @param player The player to save the data for.
+   */
   public void savePlayerData(Player player) {
     String uuid = player.getUniqueId().toString();
-
     Boolean enabled = plugin.musikkeurEnabled.get(player);
+
     plugin.dataConfig.set(uuid + ".enabled", enabled);
     try {
       plugin.dataConfig.save(plugin.dataFile);
