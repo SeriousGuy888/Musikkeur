@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.UUID;
+import java.io.IOException;
 
 public class JoinLeaveListener implements Listener {
   Musikkeur plugin;
@@ -20,8 +20,13 @@ public class JoinLeaveListener implements Listener {
     Player player = event.getPlayer();
     String uuid = player.getUniqueId().toString();
 
-    // get the player's data saved in data.yml
-    Boolean enabled = plugin.dataConfig.getBoolean(uuid + ".enabled");
+    boolean enabled;
+    if(!plugin.dataConfig.contains(uuid + ".enabled")) {
+      enabled = true;
+    } else {
+      // get the player's data saved in data.yml
+      enabled = plugin.dataConfig.getBoolean(uuid + ".enabled");
+    }
 
     // save whether the player has musikkeur enabled in this hashmap.
     plugin.musikkeurEnabled.put(player, enabled);
@@ -32,7 +37,12 @@ public class JoinLeaveListener implements Listener {
     Player player = event.getPlayer();
     String uuid = player.getUniqueId().toString();
 
-    boolean enabled = plugin.musikkeurEnabled.get(player);
-    if(true);
+    Boolean enabled = plugin.musikkeurEnabled.get(player);
+    plugin.dataConfig.set(uuid + ".enabled", enabled);
+    try {
+      plugin.dataConfig.save(plugin.dataFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

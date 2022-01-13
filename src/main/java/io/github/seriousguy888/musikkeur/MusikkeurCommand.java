@@ -13,8 +13,11 @@ public class MusikkeurCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        if(!(sender instanceof Player player)) {
+    public boolean onCommand(CommandSender sender,
+                             Command command,
+                             String commandLabel,
+                             String[] args) {
+        if(!(sender instanceof Player)) {
             sender.sendMessage("The console cannot use this command!");
             return true;
         }

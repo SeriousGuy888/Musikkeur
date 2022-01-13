@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public final class Musikkeur extends JavaPlugin {
+  public File dataFile;
   public FileConfiguration dataConfig;
   public HashMap<Player, Boolean> musikkeurEnabled;
 
@@ -21,7 +22,7 @@ public final class Musikkeur extends JavaPlugin {
   public void onEnable() {
     registerListeners();
 
-    File dataFile = new File(getDataFolder() + File.separator + "data.yml");
+    dataFile = new File(getDataFolder() + File.separator + "data.yml");
     if(!dataFile.exists()) {
       try {
         dataFile.getParentFile().mkdirs();
@@ -31,12 +32,16 @@ public final class Musikkeur extends JavaPlugin {
       }
     }
     dataConfig = YamlConfiguration.loadConfiguration(dataFile);
+
+    musikkeurEnabled = new HashMap<>();
   }
 
   private void registerListeners() {
     PluginManager pluginManager = Bukkit.getPluginManager();
 
     pluginManager.registerEvents(new NoteBlockGui(), this);
+    pluginManager.registerEvents(new JoinLeaveListener(this), this);
+
     this.getCommand("musikkeur").setExecutor(new MusikkeurCommand(this));
   }
 

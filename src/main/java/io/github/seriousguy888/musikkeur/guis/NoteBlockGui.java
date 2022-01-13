@@ -75,7 +75,7 @@ public class NoteBlockGui implements Listener {
             loopNote.getTone() + (loopNote.isSharped() ? "#" : ""));
 
         ItemStack banner = new ItemStack(Material.WHITE_BANNER);
-        BannerMeta bannerMeta = (BannerMeta) banner;
+//        BannerMeta bannerMeta = (BannerMeta) banner;
 
         keyPane.addItem(new GuiItem(item), x, y);
       }
