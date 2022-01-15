@@ -1,4 +1,4 @@
-package io.github.seriousguy888.musikkeur.guis;
+package io.github.seriousguy888.musikkeur.listeners;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
@@ -20,10 +20,24 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 public class NoteBlockGui implements Listener {
-  Musikkeur plugin;
+  private final Musikkeur plugin;
+  private final Note[][] guiLayout = {
+      { new Note(0), new Note(2), new Note(4), null, null, null, null, null, null },
+      { null, new Note(1), new Note(3), new Note(5), null, null, null, null, null },
+      { new Note(7), new Note(9), null, new Note(12), new Note(14), new Note(16), null, null, null },
+      { new Note(6), new Note(8), new Note(10), new Note(11), new Note(13), new Note(15), new Note(17), null, null },
+      { new Note(19), new Note(21), null, new Note(24), null, null, null, null, null },
+      { new Note(18), new Note(20), new Note(22), new Note(23), null, null, null, null, null },
+  };
+
+  private HashMap<Player, ChestGui> playerGuis;
+
   public NoteBlockGui(Musikkeur plugin) {
     this.plugin = plugin;
+    this.playerGuis = new HashMap<>();
   }
 
   @EventHandler
@@ -43,7 +57,6 @@ public class NoteBlockGui implements Listener {
 
     event.setCancelled(true);
 
-    NoteBlock noteBlock = (NoteBlock) block.getBlockData();
 
     ChestGui gui = new ChestGui(6, "Note Block");
     gui.setOnGlobalClick(e -> e.setCancelled(true));
@@ -54,16 +67,18 @@ public class NoteBlockGui implements Listener {
     bgPane.setRepeat(true);
     gui.addPane(bgPane);
 
+    playerGuis.put(player, gui);
 
-    Note[][] guiLayout = {
-        { new Note(0), new Note(2), new Note(4), null, null, null, null, null, null },
-        { null, new Note(1), new Note(3), new Note(5), null, null, null, null, null },
-        { new Note(7), new Note(9), null, new Note(12), new Note(14), new Note(16), null, null, null },
-        { new Note(6), new Note(8), new Note(10), new Note(11), new Note(13), new Note(15), new Note(17), null, null },
-        { new Note(19), new Note(21), null, new Note(24), null, null, null, null, null },
-        { new Note(18), new Note(20), new Note(22), new Note(23), null, null, null, null, null },
-    };
+    openNoteBlockGui(player, block, false);
+  }
 
+  private void openNoteBlockGui(Player player, Block block, boolean refreshing) {
+    NoteBlock noteBlock = (NoteBlock) block.getBlockData();
+    ChestGui gui = playerGuis.get(player);
+    if(gui == null)
+      return;
+
+    gui.setTitle(Math.random() + "");
 
     StaticPane keyPane = new StaticPane(0, 0, 9, 6, Pane.Priority.NORMAL);
 
@@ -99,12 +114,15 @@ public class NoteBlockGui implements Listener {
 
       noteBlock.setNote(selectedNote);
       block.setBlockData(noteBlock);
-      clicker.closeInventory();
+      openNoteBlockGui(player, block, true);
     });
 
-
     gui.addPane(keyPane);
+    playerGuis.put(player, gui);
 
-    gui.show(player);
+    if(refreshing)
+      gui.update();
+    else
+      gui.show(player);
   }
 }

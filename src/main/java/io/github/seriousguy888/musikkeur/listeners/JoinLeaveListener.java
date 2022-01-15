@@ -1,5 +1,6 @@
-package io.github.seriousguy888.musikkeur;
+package io.github.seriousguy888.musikkeur.listeners;
 
+import io.github.seriousguy888.musikkeur.Musikkeur;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class JoinLeaveListener implements Listener {
   Musikkeur plugin;
 
-  JoinLeaveListener(Musikkeur plugin) {
+  public JoinLeaveListener(Musikkeur plugin) {
     this.plugin = plugin;
   }
 

@@ -1,6 +1,7 @@
 package io.github.seriousguy888.musikkeur;
 
-import io.github.seriousguy888.musikkeur.guis.NoteBlockGui;
+import io.github.seriousguy888.musikkeur.listeners.JoinLeaveListener;
+import io.github.seriousguy888.musikkeur.listeners.NoteBlockGui;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
