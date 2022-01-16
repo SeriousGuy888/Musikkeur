@@ -25,12 +25,12 @@ import java.util.HashMap;
 public class NoteBlockGui implements Listener {
   private final Musikkeur plugin;
   private final Note[][] guiLayout = {
-      { null, null, null, new Note(0), new Note(2), new Note(4), null, null, null },
-      { null, null, null, null, new Note(1), new Note(3), new Note(5), null, null },
-      { new Note(7), new Note(9), null, new Note(12), new Note(14), new Note(16), null, null, null },
-      { new Note(6), new Note(8), new Note(10), new Note(11), new Note(13), new Note(15), new Note(17), null, null },
-      { new Note(19), new Note(21), null, new Note(24), null, null, null, null, null },
-      { new Note(18), new Note(20), new Note(22), new Note(23), null, null, null, null, null },
+      { null, null, null, new Note(0), new Note(2), new Note(4), null, null },
+      { null, null, null, null, new Note(1), new Note(3), new Note(5), null },
+      { new Note(7), new Note(9), null, new Note(12), new Note(14), new Note(16), null, null },
+      { new Note(6), new Note(8), new Note(10), new Note(11), new Note(13), new Note(15), new Note(17), null },
+      { new Note(19), new Note(21), null, new Note(24), null, null, null, null },
+      { new Note(18), new Note(20), new Note(22), new Note(23), null, null, null, null },
   };
 
   private final HashMap<Player, ChestGui> playerGuis;
@@ -80,12 +80,9 @@ public class NoteBlockGui implements Listener {
     OutlinePane bgPane = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOW);
     bgPane.addItem(new GuiItem(new ItemBuilder().createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ")));
     bgPane.setRepeat(true);
-    gui.addPane(bgPane);
 
 
-
-    StaticPane keyPane = new StaticPane(0, 0, 9, 6, Pane.Priority.NORMAL);
-
+    StaticPane notesPane = new StaticPane(0, 0, 8, 6, Pane.Priority.NORMAL);
     for(int y = 0; y < guiLayout.length; y++) {
       Note[] noteRow = guiLayout[y];
       for(int x = 0; x < noteRow.length; x++) {
@@ -97,12 +94,10 @@ public class NoteBlockGui implements Listener {
         boolean isSelectedNote = noteBlock.getNote().equals(loopNote);
         ItemStack item = new ItemBuilder().getNoteItem(loopNote, isSelectedNote);
 
-        keyPane.addItem(new GuiItem(item), x, y);
+        notesPane.addItem(new GuiItem(item), x, y);
       }
     }
-
-
-    keyPane.setOnClick(clickEvent -> {
+    notesPane.setOnClick(clickEvent -> {
       HumanEntity clicker = clickEvent.getWhoClicked();
 
       int slotX = (int) Math.floor((double) clickEvent.getSlot() / 9);
@@ -123,7 +118,18 @@ public class NoteBlockGui implements Listener {
       openNoteBlockGui(player, block, true);
     });
 
-    gui.addPane(keyPane);
+
+    // todo: show some info like the note block's instrument in the rightmost column
+    StaticPane infoPane = new StaticPane(8, 0, 1, 9, Pane.Priority.NORMAL);
+    for(int i = 0; i < 6; i++) {
+      infoPane.addItem(new GuiItem(new ItemBuilder()
+              .createItem(Material.ACACIA_BOAT, 42, "show some info here")), 0, i);
+    }
+
+
+    gui.addPane(bgPane);
+    gui.addPane(notesPane);
+    gui.addPane(infoPane);
     playerGuis.put(player, gui);
 
     if(refreshing)
