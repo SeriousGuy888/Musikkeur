@@ -4,13 +4,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Note;
+import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ItemBuilder {
@@ -27,80 +31,127 @@ public class ItemBuilder {
     return item;
   }
 
-  public ItemStack createNoteBanner(Note note) {
+  /**
+   * @param note The Note object to generate an representing ItemStack for.
+   * @param isSelectedNote Whether this is the currently selected note and should have an enchantment glint.
+   * @return An ItemStack of a shield with an appropriate banner design on it. May be enchanted if selected.
+   */
+  public ItemStack getNoteItem(Note note, boolean isSelectedNote) {
     boolean sharp = note.isSharped();
     DyeColor white = DyeColor.WHITE;
     DyeColor black = DyeColor.BLACK;
 
-    ItemStack banner = new ItemStack(sharp ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+    ItemStack banner = addNoteItemMetadata(new ItemStack(Material.WHITE_BANNER), note);
     BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
     if(bannerMeta == null)
       return null;
 
-    bannerMeta.setDisplayName("" + ChatColor.AQUA +
-        note.getTone() + (note.isSharped() ? "#" : "") + " " +
-        note.getOctave());
+    ArrayList<Pattern> patterns = new ArrayList<>();
+    patterns.add(new Pattern(sharp ? black : white, PatternType.BASE));
 
-    // hides banner patterns in tooltip https://minecraft.fandom.com/wiki/Player.dat_format#Display_Properties
-    bannerMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+
 
     if(sharp) {
-      bannerMeta.addPattern(new Pattern(white, PatternType.STRAIGHT_CROSS));
-      bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-      bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_BOTTOM));
-      bannerMeta.addPattern(new Pattern(black, PatternType.BORDER));
+      patterns.add(new Pattern(white, PatternType.STRAIGHT_CROSS));
+      patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+      patterns.add(new Pattern(black, PatternType.STRIPE_BOTTOM));
+      patterns.add(new Pattern(black, PatternType.BORDER));
     } else {
       switch(note.getTone().name()) {
         case "C":
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_LEFT));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_BOTTOM));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_LEFT));
+          patterns.add(new Pattern(black, PatternType.STRIPE_BOTTOM));
           break;
         case "D":
-          bannerMeta.addPattern(new Pattern(black, PatternType.HALF_VERTICAL));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_BOTTOM));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_RIGHT));
+          patterns.add(new Pattern(black, PatternType.HALF_VERTICAL));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_BOTTOM));
+          patterns.add(new Pattern(black, PatternType.STRIPE_RIGHT));
           break;
         case "E":
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_LEFT));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_BOTTOM));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_MIDDLE));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_LEFT));
+          patterns.add(new Pattern(black, PatternType.STRIPE_BOTTOM));
+          patterns.add(new Pattern(black, PatternType.STRIPE_MIDDLE));
           break;
         case "F":
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_LEFT));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_MIDDLE));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_LEFT));
+          patterns.add(new Pattern(black, PatternType.STRIPE_MIDDLE));
           break;
         case "G":
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_RIGHT));
-          bannerMeta.addPattern(new Pattern(white, PatternType.HALF_HORIZONTAL));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_LEFT));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_BOTTOM));
+          patterns.add(new Pattern(black, PatternType.STRIPE_RIGHT));
+          patterns.add(new Pattern(white, PatternType.HALF_HORIZONTAL));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_LEFT));
+          patterns.add(new Pattern(black, PatternType.STRIPE_BOTTOM));
           break;
         case "A":
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_LEFT));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_RIGHT));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_MIDDLE));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_LEFT));
+          patterns.add(new Pattern(black, PatternType.STRIPE_RIGHT));
+          patterns.add(new Pattern(black, PatternType.STRIPE_MIDDLE));
           break;
         case "B":
-          bannerMeta.addPattern(new Pattern(black, PatternType.HALF_VERTICAL));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_TOP));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_BOTTOM));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_MIDDLE));
-          bannerMeta.addPattern(new Pattern(black, PatternType.STRIPE_RIGHT));
+          patterns.add(new Pattern(black, PatternType.HALF_VERTICAL));
+          patterns.add(new Pattern(black, PatternType.STRIPE_TOP));
+          patterns.add(new Pattern(black, PatternType.STRIPE_BOTTOM));
+          patterns.add(new Pattern(black, PatternType.STRIPE_MIDDLE));
+          patterns.add(new Pattern(black, PatternType.STRIPE_RIGHT));
           break;
         default:
-          bannerMeta.addPattern(new Pattern(black, PatternType.CREEPER));
+          patterns.add(new Pattern(black, PatternType.CREEPER));
           break;
       }
-      bannerMeta.addPattern(new Pattern(white, PatternType.BORDER));
+      patterns.add(new Pattern(white, PatternType.BORDER));
     }
 
+    bannerMeta.setPatterns(patterns);
     banner.setItemMeta(bannerMeta);
-    return banner;
+
+    if(isSelectedNote) { // if this is the selected note, return an enchanted shield instead
+      ItemStack shield = addNoteItemMetadata(new ItemStack(Material.SHIELD), note);
+      BlockStateMeta shieldMeta = (BlockStateMeta) shield.getItemMeta();
+      if(shieldMeta == null)
+        return banner;
+
+      Banner shieldBanner = (Banner) shieldMeta.getBlockState(); // get the shield's banner
+      shieldBanner.setPatterns(patterns); // add the already created patterns to it
+      shieldBanner.update();
+      shieldMeta.setBlockState(shieldBanner); // add the banner to the shield
+      shieldMeta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
+      shield.setItemMeta(shieldMeta);
+
+      return shield;
+    } else { // if not, then just return the banner item
+      return banner;
+    }
+  }
+
+  /**
+   * Changes an ItemStack so that it will hide any banner patterns and enchantments.
+   * Also names the item accordingly to the note provided.
+   * @param item The ItemStack to modify.
+   * @param note The note to name the item for.
+   * @return The ItemStack with the item flags added to it.
+   */
+  private ItemStack addNoteItemMetadata(ItemStack item, Note note) {
+    ItemMeta itemMeta = item.getItemMeta();
+    if(itemMeta == null)
+      return item;
+
+    itemMeta.setDisplayName("" + ChatColor.AQUA +
+        note.getTone() + (note.isSharped() ? "#" : "") + " " +
+        note.getOctave());
+
+    /*
+    HIDE_POTION_EFFECTS hides banner patterns in tooltip
+      https://minecraft.fandom.com/wiki/Player.dat_format#Display_Properties
+    HIDE_ENCHANTS hides any enchantments from the tooltip
+     */
+    itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
+    item.setItemMeta(itemMeta);
+    return item;
   }
 }

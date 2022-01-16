@@ -7,7 +7,7 @@ import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import io.github.seriousguy888.musikkeur.Musikkeur;
 import io.github.seriousguy888.musikkeur.utils.ItemBuilder;
-import org.bukkit.Instrument;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.block.Block;
@@ -33,7 +33,7 @@ public class NoteBlockGui implements Listener {
       { new Note(18), new Note(20), new Note(22), new Note(23), null, null, null, null, null },
   };
 
-  private HashMap<Player, ChestGui> playerGuis;
+  private final HashMap<Player, ChestGui> playerGuis;
 
   public NoteBlockGui(Musikkeur plugin) {
     this.plugin = plugin;
@@ -62,11 +62,6 @@ public class NoteBlockGui implements Listener {
     gui.setOnGlobalClick(e -> e.setCancelled(true));
     gui.setOnGlobalDrag(e -> e.setCancelled(true));
 
-    OutlinePane bgPane = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOW);
-    bgPane.addItem(new GuiItem(new ItemBuilder().createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ")));
-    bgPane.setRepeat(true);
-    gui.addPane(bgPane);
-
     playerGuis.put(player, gui);
 
     openNoteBlockGui(player, block, false);
@@ -78,7 +73,16 @@ public class NoteBlockGui implements Listener {
     if(gui == null)
       return;
 
-    gui.setTitle(Math.random() + "");
+
+    gui.getPanes().clear(); // clear panes to be readded when gui is refreshed
+
+
+    OutlinePane bgPane = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOW);
+    bgPane.addItem(new GuiItem(new ItemBuilder().createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ")));
+    bgPane.setRepeat(true);
+    gui.addPane(bgPane);
+
+
 
     StaticPane keyPane = new StaticPane(0, 0, 9, 6, Pane.Priority.NORMAL);
 
@@ -90,7 +94,8 @@ public class NoteBlockGui implements Listener {
         if(loopNote == null)
           continue;
 
-        ItemStack item = new ItemBuilder().createNoteBanner(loopNote);
+        boolean isSelectedNote = noteBlock.getNote().equals(loopNote);
+        ItemStack item = new ItemBuilder().getNoteItem(loopNote, isSelectedNote);
 
         keyPane.addItem(new GuiItem(item), x, y);
       }
@@ -108,9 +113,10 @@ public class NoteBlockGui implements Listener {
         return;
 
       /*
-       todo: play the selected note to the clicker when the note is clicked
-       make sure to play the note with the correct instrument that the note block is using
-       */
+      todo: play the selected note to the clicker when the note is clicked
+            make sure to play the note with the correct instrument that the note block is using
+      todo: make right clicking on a note play the note to all players and not close the gui
+      */
 
       noteBlock.setNote(selectedNote);
       block.setBlockData(noteBlock);
