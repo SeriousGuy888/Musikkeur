@@ -25,8 +25,8 @@ import java.util.HashMap;
 public class NoteBlockGui implements Listener {
   private final Musikkeur plugin;
   private final Note[][] guiLayout = {
-      { new Note(0), new Note(2), new Note(4), null, null, null, null, null, null },
-      { null, new Note(1), new Note(3), new Note(5), null, null, null, null, null },
+      { null, null, null, new Note(0), new Note(2), new Note(4), null, null, null },
+      { null, null, null, null, new Note(1), new Note(3), new Note(5), null, null },
       { new Note(7), new Note(9), null, new Note(12), new Note(14), new Note(16), null, null, null },
       { new Note(6), new Note(8), new Note(10), new Note(11), new Note(13), new Note(15), new Note(17), null, null },
       { new Note(19), new Note(21), null, new Note(24), null, null, null, null, null },
