@@ -135,7 +135,12 @@ public class NoteBlockGui implements Listener {
             ChatColor.GOLD + "Instrument",
             ChatColor.YELLOW + noteBlock.getInstrument().toString()
         )), 0, 0);
-
+    infoPane.addItem(new GuiItem(new ItemBuilder()
+        .createItem(Material.TARGET, 1,
+            ChatColor.DARK_AQUA + "How to Use",
+            ChatColor.AQUA + "Left click to set a note and close GUI.",
+            ChatColor.AQUA + "Right click to set note and keep GUI open."
+        )),  0, 5);
 
     gui.addPane(bgPane);
     gui.addPane(notesPane);
