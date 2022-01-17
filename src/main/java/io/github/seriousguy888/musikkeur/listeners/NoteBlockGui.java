@@ -48,6 +48,8 @@ public class NoteBlockGui implements Listener {
     Player player = event.getPlayer();
     if(!plugin.musikkeurEnabled.get(player))
       return;
+    if(player.isSneaking())
+      return;
 
     if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
       return;
