@@ -101,8 +101,6 @@ public class NoteBlockGui implements Listener {
       }
     }
     notesPane.setOnClick(clickEvent -> {
-      HumanEntity clicker = clickEvent.getWhoClicked();
-
       int slotX = (int) Math.floor((double) clickEvent.getSlot() / 9);
       int slotY = clickEvent.getSlot() % 9;
       Note selectedNote = guiLayout[slotX][slotY];
@@ -110,15 +108,18 @@ public class NoteBlockGui implements Listener {
       if(selectedNote == null)
         return;
 
-      /*
-      todo: play the selected note to the clicker when the note is clicked
-            make sure to play the note with the correct instrument that the note block is using
-      todo: make right clicking on a note play the note to all players and not close the gui
-      */
 
+      Bukkit.getOnlinePlayers() // play note to all players who can hear it
+          .stream()
+          .filter(p -> p.getLocation().distanceSquared(block.getLocation()) <= Math.pow(16, 2))
+          .forEach(p -> p.playNote(player.getLocation(), noteBlock.getInstrument(), selectedNote));
       noteBlock.setNote(selectedNote);
       block.setBlockData(noteBlock);
-      openNoteBlockGui(player, block, true);
+
+      if(clickEvent.isRightClick()) // if right click, refresh gui
+        openNoteBlockGui(player, block, true);
+      else // otherwise, close gui
+        player.closeInventory();
     });
 
 
