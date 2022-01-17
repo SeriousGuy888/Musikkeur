@@ -1,13 +1,16 @@
 package io.github.seriousguy888.musikkeur.listeners;
 
+import com.github.stefvanschie.inventoryframework.font.util.Font;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import com.github.stefvanschie.inventoryframework.pane.component.Label;
 import io.github.seriousguy888.musikkeur.Musikkeur;
 import io.github.seriousguy888.musikkeur.utils.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.block.Block;
@@ -119,12 +122,16 @@ public class NoteBlockGui implements Listener {
     });
 
 
-    // todo: show some info like the note block's instrument in the rightmost column
-    StaticPane infoPane = new StaticPane(8, 0, 1, 9, Pane.Priority.NORMAL);
-    for(int i = 0; i < 6; i++) {
+    StaticPane infoPane = new StaticPane(8, 0, 1, 6, Pane.Priority.NORMAL);
+    for(int i = 0; i < infoPane.getHeight(); i++) {
       infoPane.addItem(new GuiItem(new ItemBuilder()
-              .createItem(Material.ACACIA_BOAT, 42, "show some info here")), 0, i);
+          .createItem(Material.GRAY_STAINED_GLASS_PANE, 1, " ")), 0, i);
     }
+    infoPane.addItem(new GuiItem(new ItemBuilder()
+        .createItem(Material.BELL, 1,
+            ChatColor.GOLD + "Instrument",
+            ChatColor.YELLOW + noteBlock.getInstrument().toString()
+        )), 0, 0);
 
 
     gui.addPane(bgPane);
