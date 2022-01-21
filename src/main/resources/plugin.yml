@@ -1,11 +1,19 @@
 name: Musikkeur
 version: '${project.version}'
+description: Tune note blocks with a GUI on right click.
+website: https://github.com/SeriousGuy888/Musikkeur
 main: io.github.seriousguy888.musikkeur.Musikkeur
 api-version: 1.18
-authors: [ SeriousGuy888, RandumPerson314 ]
-description: Tune note blocks
-
-commands: 
+authors:
+  - SeriousGuy888
+  - RandumPerson314
+commands:
   musikkeur:
-    description: oeuf
+    description: Toggle whether the note block tuning GUI will open.
     permission: musikkeur.use
+permissions:
+  musikkeur.use:
+    description: >
+      Allows for the use of the /musikkeur command and for the user to use
+      the Musikkeur note block tuning GUI when right clicking on a note block.
+    default: true

@@ -6,12 +6,12 @@
 
     <groupId>io.github.seriousguy888</groupId>
     <artifactId>Musikkeur</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>Musikkeur</name>
 
-    <description>Tune note blocks</description>
+    <description>Tune note blocks with a GUI on right click.</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
