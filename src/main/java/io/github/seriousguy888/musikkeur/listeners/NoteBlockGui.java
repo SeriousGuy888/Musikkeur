@@ -1,12 +1,10 @@
 package io.github.seriousguy888.musikkeur.listeners;
 
-import com.github.stefvanschie.inventoryframework.font.util.Font;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
-import com.github.stefvanschie.inventoryframework.pane.component.Label;
 import io.github.seriousguy888.musikkeur.Musikkeur;
 import io.github.seriousguy888.musikkeur.utils.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -15,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.NoteBlock;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -83,7 +80,7 @@ public class NoteBlockGui implements Listener {
 
 
     OutlinePane bgPane = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOW);
-    bgPane.addItem(new GuiItem(new ItemBuilder().createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ")));
+    bgPane.addItem(new GuiItem(new ItemBuilder().createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, " ")));
     bgPane.setRepeat(true);
 
 
@@ -128,15 +125,15 @@ public class NoteBlockGui implements Listener {
     StaticPane infoPane = new StaticPane(8, 0, 1, 6, Pane.Priority.NORMAL);
     for(int i = 0; i < infoPane.getHeight(); i++) {
       infoPane.addItem(new GuiItem(new ItemBuilder()
-          .createItem(Material.GRAY_STAINED_GLASS_PANE, 1, " ")), 0, i);
+          .createItem(Material.GRAY_STAINED_GLASS_PANE, " ")), 0, i);
     }
     infoPane.addItem(new GuiItem(new ItemBuilder()
-        .createItem(Material.BELL, 1,
+        .createItem(Material.BELL,
             ChatColor.GOLD + "Instrument",
             ChatColor.YELLOW + noteBlock.getInstrument().toString()
         )), 0, 0);
     infoPane.addItem(new GuiItem(new ItemBuilder()
-        .createItem(Material.TARGET, 1,
+        .createItem(Material.TARGET,
             ChatColor.DARK_AQUA + "How to Use",
             ChatColor.AQUA + "Left click to set a note and close GUI.",
             ChatColor.AQUA + "Right click to set note and keep GUI open."

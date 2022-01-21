@@ -18,10 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ItemBuilder {
-  @SuppressWarnings("SameParameterValue")
-  public ItemStack createItem(Material material, int count, String name, String... lore) {
+  public ItemStack createItem(Material material, String name, String... lore) {
     ItemStack item = new ItemStack(material);
-    item.setAmount(count);
     ItemMeta meta = item.getItemMeta();
     if(meta == null)
       return item;
