@@ -137,7 +137,21 @@ public class NoteBlockGui implements Listener {
             ChatColor.DARK_AQUA + "How to Use",
             ChatColor.AQUA + "Left click to set a note and close GUI.",
             ChatColor.AQUA + "Right click to set note and keep GUI open."
+        )),  0, 4);
+    infoPane.addItem(new GuiItem(new ItemBuilder()
+        .createItem(Material.BARRIER,
+            ChatColor.DARK_RED + "Close Menu",
+            ChatColor.RED + "Click to close the GUI.",
+            ChatColor.RED + "You can use /musikkeur to toggle this GUI opening."
         )),  0, 5);
+
+    infoPane.setOnClick(click -> { // on click on barrier, close gui
+      ItemStack clickedItem = click.getCurrentItem();
+      if(clickedItem == null || clickedItem.getType() != Material.BARRIER)
+        return;
+      player.closeInventory();
+    });
+
 
     gui.addPane(bgPane);
     gui.addPane(notesPane);
