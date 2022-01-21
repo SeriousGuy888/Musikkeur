@@ -15,4 +15,4 @@ There is only one command.
 
 ## Permissions
 There is only one permission.  
-`musikkeur.use` - Grants access to using tuning functionality and the /musikkeur command to toggle the functionality.
+`musikkeur.use` - Grants access to using tuning functionality and the /musikkeur command to toggle the functionality. Granted by default to all players.
