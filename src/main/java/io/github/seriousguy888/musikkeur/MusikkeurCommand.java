@@ -26,7 +26,8 @@ public class MusikkeurCommand implements CommandExecutor {
         Player player = (Player) sender;
         Boolean enabled = plugin.musikkeurEnabled.get(player);
 
-        player.sendMessage(ChatColor.YELLOW + (enabled ? "Disabling" : "Enabling") + " Musikkeur note block editing.");
+        player.sendMessage(ChatColor.YELLOW + (enabled ? "Disabled" : "Enabled") +
+            " Musikkeur note block tuning GUI.");
         plugin.musikkeurEnabled.put(player, !enabled);
 
         return true;
