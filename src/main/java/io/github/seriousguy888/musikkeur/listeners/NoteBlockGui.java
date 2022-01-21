@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
 
 import java.util.HashMap;
 
@@ -43,6 +44,8 @@ public class NoteBlockGui implements Listener {
   @EventHandler
   public void onInteract(PlayerInteractEvent event) {
     Player player = event.getPlayer();
+    if(!player.hasPermission("musikkeur.use"))
+      return; // return if the player does not have the required permission node
     if(!plugin.musikkeurEnabled.get(player))
       return;
     if(player.isSneaking())
